@@ -1,0 +1,49 @@
+- name: Update APT cache
+  tags: [docker]
+  become: true
+  apt:
+    update_cache: yes
+- name: Install packages to allow apt to use a repository over HTTPS
+  tags: [docker]
+  become: true
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - software-properties-common
+- name: Add Docker’s official GPG key
+  tags: [docker]
+  become: true
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+- name: Add Docker CE stable repository for Ubuntu Bionic
+  tags: [docker]
+  become: true
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+    state: present
+- name: Update APT cache
+  tags: [docker]
+  become: true
+  apt:
+    update_cache: yes
+- name: Install Docker CE
+  tags: [docker]
+  become: true
+  package:
+    name: docker-ce
+    state: present
+- name: Install pip3
+  apt: 
+    name: python3-pip
+    state: present
+  tags: [docker]
+- name: Install Docker module for Ansible
+  pip: 
+    name: docker
+    state: present
+  tags: [docker]

@@ -1,0 +1,26 @@
+- name: sites-enabled directory present to place configuration
+  file:
+    path=/etc/nginx/sites-enabled
+    state=directory
+  tags: [nginx]
+- name: nginx container running
+  docker_container:
+    image: "nginx"
+    name: "nginx"
+    state: "started"
+    ports:
+    - "80:80"
+    volumes: "{{ volumes }}"
+  tags: [nginx]
+- name: Exec command to make nginx redirect traffic to app
+  shell: docker exec -i nginx /bin/bash -c "sed -i 's/include \/etc\/nginx\/conf.d\/\*\.conf;/include \/etc\/nginx\/sites-enabled\/\*.conf;/g' /etc/nginx/nginx.conf;nginx -s reload;"
+  tags: [nginx]
+- name: Copy deployment script
+  copy:
+    src=bluegreendeployment.sh
+    dest=/usr/local/bin/bluegreendeployment.sh
+    mode="0755"
+  tags: [nginx]
+- name: Perform deployment
+  shell: bluegreendeployment.sh
+  tags: [nginx]

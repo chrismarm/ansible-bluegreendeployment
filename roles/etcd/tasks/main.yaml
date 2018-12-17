@@ -1,0 +1,13 @@
+- name: Install etcd
+  apt: 
+    name: etcd
+    state: present
+  tags: [etcd]
+- name: Start etcd service
+  service:
+    name: etcd
+    pattern: /usr/local/bin/etcd
+    state: started
+    # To use service and not systemd
+    use: service
+  tags: [etcd]

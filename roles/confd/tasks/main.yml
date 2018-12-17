@@ -1,0 +1,32 @@
+- name: Unzip installation file
+  copy:
+    src=confd-0.16.0-linux-amd64
+    dest=/opt/confd-0.16.0-linux-amd64
+    mode="0755"
+  tags: [confd]
+- name: Link to executable
+  file:
+    src=/opt/confd-0.16.0-linux-amd64
+    dest=/usr/local/bin/confd
+    state=link
+  tags: [confd]
+- name: Subdirectory confd.d is present
+  file:
+    path=/etc/confd/conf.d
+    state=directory
+  tags: [confd]
+- name: Subdirectory templates is present
+  file:
+    path=/etc/confd/templates
+    state=directory
+  tags: [confd]
+- name: Configuration definition is present
+  copy:
+    src=deployment.toml
+    dest=/etc/confd/conf.d/deployment.toml
+  tags: [confd]
+- name: Config template is present
+  copy:
+    src=deployment.conf.tmpl
+    dest=/etc/confd/templates/deployment.conf.tmpl
+  tags: [confd]

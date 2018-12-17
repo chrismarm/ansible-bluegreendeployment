@@ -1,0 +1,2 @@
+volumes:
+  - '/etc/nginx/sites-enabled:/etc/nginx/sites-enabled'

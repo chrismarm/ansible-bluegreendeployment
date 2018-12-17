@@ -1,0 +1,7 @@
+[template]
+src = "deployment.conf.tmpl"
+dest = "/etc/nginx/sites-enabled/deployment.conf"
+keys = [
+    "/deployment/port"
+]
+reload_cmd = "/usr/bin/docker exec nginx /bin/bash -c \"nginx -s reload\""
